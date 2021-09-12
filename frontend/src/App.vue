@@ -1,28 +1,44 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="container">
+      <h1>Simple CRUD Application</h1>
+      <h2>Add New Task</h2>
+      <AddTask />
+      <h2>List Tasks</h2>
+      <Tasks />
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import AddTask from "@/components/AddTask.vue";
+import Tasks from "@/components/Tasks.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    AddTask,
+    Tasks,
+  },
+};
 </script>
 
 <style lang="scss">
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+h1,
+h2 {
+  margin-bottom: 15px;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  .container {
+    font-family: "Roboto";
+    max-width: 1200px;
+    padding: 40px 15px;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 </style>
