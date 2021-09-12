@@ -23,7 +23,9 @@
           </vs-td>
           <vs-td>
             <div class="task-content--buttons">
-              <vs-button border info> Update </vs-button>
+              <vs-button border info @click="openModal(task)">
+                Update
+              </vs-button>
               <vs-button border danger @click="removeTask(task.id)">
                 Remove
               </vs-button>
@@ -32,20 +34,41 @@
         </vs-tr>
       </template>
     </vs-table>
+
+    <vs-dialog width="300px" not-center v-model="activeEdit">
+      <template #header>
+        <h4 class="not-margin">
+          Edit task #<b>{{ taskID }}</b>
+        </h4>
+      </template>
+
+      <div class="task-edit--input">
+        <vs-input v-model="name" label="Name" placeholder="Name"></vs-input>
+      </div>
+      <div class="task-edit--input">
+        <vs-input
+          v-model="description"
+          label="Description"
+          placeholder="Description"
+        ></vs-input>
+      </div>
+
+      <template #footer>
+        <div class="task-edit--buttons">
+          <vs-button @click="updateTask"> Ok </vs-button>
+          <vs-button @click="closeModal" dark> Cancel </vs-button>
+        </div>
+      </template>
+    </vs-dialog>
   </div>
 </template>
 <script>
 export default {
   data: () => ({
-    editActive: false,
-    edit: null,
-    editProp: "",
-    search: "",
-    allCheck: false,
-    page: 1,
-    max: 3,
-    active: 0,
-    selected: [],
+    taskID: null,
+    name: "",
+    description: "",
+    activeEdit: false,
   }),
   computed: {
     tasks() {
@@ -63,6 +86,34 @@ export default {
         });
       });
     },
+    updateTask() {
+      let task = {
+        id: this.taskID,
+        name: this.name,
+        description: this.description,
+      };
+      this.$store.dispatch("updateTask", task).then(() => {
+        this.activeEdit = false;
+        this.$vs.notification({
+          progress: "auto",
+          color: "success",
+          position: "top-right",
+          title: "Successfull! Task updated!",
+        });
+      });
+    },
+    openModal(task) {
+      this.taskID = task.id;
+      this.name = task.name;
+      this.description = task.description;
+      this.activeEdit = true;
+    },
+    closeModal() {
+      this.taskID = null;
+      this.name = "";
+      this.description = "";
+      this.activeEdit = false;
+    },
   },
   mounted() {
     this.$store.dispatch("getAllTasks");
@@ -76,6 +127,15 @@ export default {
   align-items: flex-start;
   justify-content: space-between;
   &--description {
+  }
+  &--buttons {
+    display: flex;
+    align-items: center;
+  }
+}
+.task-edit {
+  &--input {
+    padding: 20px 0;
   }
   &--buttons {
     display: flex;

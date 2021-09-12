@@ -18,6 +18,10 @@ export default new Vuex.Store({
     DELETE_TASK(state, payload) {
       const i = state.tasks.map(item => item.id).indexOf(payload);
       state.tasks.splice(i, 1);
+    },
+    UPDATE_TASK(state, payload) {
+      const i = state.tasks.map(item => item.id).indexOf(payload.id);
+      Vue.set(state.tasks, i, payload);
     }
   },
   actions: {
@@ -35,6 +39,12 @@ export default new Vuex.Store({
       let result = await axios.delete('http://192.168.1.104:8000/api/tasks/' + id);
       if (result.status === 200) {
         commit('DELETE_TASK', id);
+      }
+    },
+    async updateTask({ commit }, task) {
+      let result = await axios.put('http://192.168.1.104:8000/api/tasks/' + task.id, task);
+      if (result.status === 200) {
+        commit('UPDATE_TASK', result.data);
       }
     }
   },

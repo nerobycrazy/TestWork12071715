@@ -4,6 +4,7 @@
       <vs-input
         label="Name"
         v-model.trim="name"
+        required
         placeholder="Enter task name"
       />
     </div>
