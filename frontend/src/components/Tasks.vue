@@ -43,11 +43,15 @@
       </template>
 
       <div class="task-edit--input">
-        <vs-input v-model="name" label="Name" placeholder="Name"></vs-input>
+        <vs-input
+          v-model.trim="name"
+          label="Name"
+          placeholder="Name"
+        ></vs-input>
       </div>
       <div class="task-edit--input">
         <vs-input
-          v-model="description"
+          v-model.trim="description"
           label="Description"
           placeholder="Description"
         ></vs-input>
@@ -92,15 +96,17 @@ export default {
         name: this.name,
         description: this.description,
       };
-      this.$store.dispatch("updateTask", task).then(() => {
-        this.activeEdit = false;
-        this.$vs.notification({
-          progress: "auto",
-          color: "success",
-          position: "top-right",
-          title: "Successfull! Task updated!",
+      if (task.name.length > 0) {
+        this.$store.dispatch("updateTask", task).then(() => {
+          this.activeEdit = false;
+          this.$vs.notification({
+            progress: "auto",
+            color: "success",
+            position: "top-right",
+            title: "Successfull! Task updated!",
+          });
         });
-      });
+      }
     },
     openModal(task) {
       this.taskID = task.id;
@@ -123,11 +129,6 @@ export default {
 
 <style lang="scss">
 .task-content {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  &--description {
-  }
   &--buttons {
     display: flex;
     align-items: center;

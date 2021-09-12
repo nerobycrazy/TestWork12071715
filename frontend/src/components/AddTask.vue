@@ -35,14 +35,16 @@ export default {
         name: this.name,
         description: this.description,
       };
-      this.$store.dispatch("addTask", task).then(() => {
-        this.$vs.notification({
-          progress: "auto",
-          color: "success",
-          position: "top-right",
-          title: "Successfull! Task added!",
+      if (task.name.length > 0) {
+        this.$store.dispatch("addTask", task).then(() => {
+          this.$vs.notification({
+            progress: "auto",
+            color: "success",
+            position: "top-right",
+            title: "Successfull! Task added!",
+          });
         });
-      });
+      }
     },
   },
 };
